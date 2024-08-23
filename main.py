@@ -47,30 +47,34 @@ def get_google_sheets_service():
 
 # Define the function for extracting order data
 extract_order_function = {
-    "name": "extract_order_data",
-    "description": "Extract order data from the conversation",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "nombre": {
-                "type": "string",
-                "description": "Customer's name"
-            },
-            "orden": {
-                "type": "string",
-                "description": "Details of the order"
-            },
-            "entrega": {
-                "type": "string",
-                "description": "Delivery method: 'Domicilio' or 'Para Recoger'"
-            },
-            "metodo_de_pago": {
-                "type": "string",
-                "description": "Payment method"
-            }
-        },
-        "required": ["nombre", "orden", "entrega", "metodo_de_pago"]
-    }
+  "name": "extract_order_data",
+  "description": "Extract order data from the conversation",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "nombre": {
+        "type": "string",
+        "description": "Customer's name"
+      },
+      "orden": {
+        "type": "string",
+        "description": "Details of the order"
+      },
+      "entrega": {
+        "type": "string",
+        "description": "Delivery method: 'Domicilio' or 'Para Recoger'"
+      },
+      "dirección": {
+        "type": "string",
+        "description": "Customer's address for delivery. Use 'EN EL RESTAURANTE' if entrega is 'Para Recoger'"
+      },
+      "metodo_de_pago": {
+        "type": "string",
+        "description": "Payment method"
+      }
+    },
+    "required": ["nombre", "orden", "entrega", "dirección", "metodo_de_pago"]
+  }
 }
 
 import logging
@@ -162,7 +166,7 @@ def save_to_sheets(order_data):
         logger.info(f"Next empty row: {next_row}")
         
         values = [
-            [order_data.get("nombre", ""), order_data.get("orden", ""), order_data.get("entrega", ""), order_data.get("metodo_de_pago", "")]
+            [order_data.get("nombre", ""), order_data.get("orden", ""), order_data.get("entrega", ""), order_data.get('dirección'), order_data.get("metodo_de_pago", "")]
         ]
         
         logger.info(f"Appending values to row {next_row}: {values}")
